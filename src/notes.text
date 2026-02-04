@@ -1,24 +1,55 @@
-ROUTES :: Nos va servir para crear las URL del backend, es decir, voy a definir todos los endpois o las rutas que el frontend puede pedir 
+ROUTES :: Nos va servir para crear las URL del backend, es decir, voy a definir todos los endpois o 
+las rutas que el frontend puede pedir 
 
-CONTROLLERS :: Nos va servir para que nostros podamos crear funciones que se van a ejecutar cuando visiten una URL
+CONTROLLERS :: Nos va servir para que nostros podamos crear funciones que se van a ejecutar cuando
+ visiten una URL
     EJEMPLO: Si visitan la URL/Login, entonces el cógido que se va a ejecutar va a estar en controllers 
 
-MODELS :: Nos va servir para poder guardar los modelos de datos de nuestra base de datos, es decir, debe poder almacenar cualquier dato, 
-pero gracias a estos modelos nostros podemos decirle que datos queremos que guarde y si no cumple con los datos que hemos especificado aquí que nos de un error,
+MODELS :: Nos va servir para poder guardar los modelos de datos de nuestra base de datos, es decir, 
+debe poder almacenar cualquier dato, pero gracias a estos modelos nostros podemos decirle que 
+datos queremos que guarde y si no cumple con los datos que hemos especificado aquí que nos de un error,
 es decir, vamos a estar creando esquemas
 
-MIDDLEWARES :: Nos va servir para nosotros poder decirle que rutas están protegidas por usuarios autoindicados, es decir, en nuestro backend pueden
-ser muchas cosas pero nosotros podemos darle información publica, es decir, que cualquiera puede pedir datos al backend y también información privada  
-que tan solo los usuarios que se han logeado pueden pedir, entonces estos nos van a ayudar a crear funciones en donde antes de que lleguen van a validarlo,
-es decir, van a crear un pequeño if, donde pueden decir si el usuario está autenticado puede continuar y si no lo está, te doy un error.
+MIDDLEWARES :: Nos va servir para nosotros poder decirle que rutas están protegidas por usuarios 
+autoindicados, es decir, en nuestro backend pueden ser muchas cosas pero nosotros podemos darle 
+información publica, es decir, que cualquiera puede pedir datos al backend y también información 
+privada que tan solo los usuarios que se han logeado pueden pedir, entonces estos nos van a ayudar 
+a crear funciones en donde antes de que lleguen van a validarlo, es decir, van a crear un pequeño 
+if, donde pueden decir si el usuario está autenticado puede continuar y si no lo está, te doy un error.
 
-SCHEMAS:: Van a estar relacionados con algunas validaciones ejm: si no espero este tipo de dato o de caracter, pues se va lanzar un error y eso se tiene que validar
-se podría llamar validators, vamos a usar una biblioteca llamada soft que este nos permite crear esquemas, que no es para la base de datos es para que cuando lleguen 
-los datos se validen cuando lleguen al backend
+SCHEMAS:: Van a estar relacionados con algunas validaciones ejm: si no espero este tipo de dato o 
+de caracter, pues se va lanzar un error y eso se tiene que validar se podría llamar validators, 
+vamos a usar una biblioteca llamada soft que este nos permite crear esquemas, que no es para la base de 
+datos es para que cuando lleguen los datos se validen cuando lleguen al backend
 
-LIBS:: Va servir para escribir código que podamos reimportar varias veces, por ejemplo el crear una funcion para generar tokens ya que se va utilizar tanto para login 
-como para register y demás modulos
+LIBS:: Va servir para escribir código que podamos reimportar varias veces, por ejemplo el crear una 
+funcion para generar tokens ya que se va utilizar tanto para login como para register y demás modulos
 
 DB.JS:: Que básicamente va a ser la base de datos, es decir, la conexión de la bdd
 
-CONFIG.JS:: Va servir para crear configuraciones que el resto de archivos va poder importar, se van a crear configuraciones generales para todo el proyecto 
+CONFIG.JS:: Va servir para crear configuraciones que el resto de archivos va poder importar, 
+se van a crear configuraciones generales para todo el proyecto 
+
+------------------------------------REQUERIMIENTOS DEL PROFESOR--------------------------------------------------------
+REQUERIMIENTOS
+
+ZOD:: libreria para validaciones complejas 
+
+servicios para la nube de backend :: Raiiway
+render: para hostear 
+libreria para node.express:: Vcryp escrip para encriptar la contraseña, que me muestre un string largo
+
+json.webtoken:: para el acceso del login, PREVEE UNA LLAVE DE SEGURIDAD,  //TOMAR EN CUENTA
+Para manejar permisos, para saber que tipo de usuario es (adminitrador, empleado)
+refresh.token (para continuar o expirar)
+
+localstorash:: manejar una información
+
+neon :: servicio para la base de datos
+
+archivo .env variables de entorno, variables que pueden ser delicadas, manejar de forma segura, llaves alphanumericos 
+unicos para cada usuario, para manejar de forma privada, esas llaves son las que se manejar en este archivo
+
+A nivel de frontend también existen un archivo similar .env
+
+git pull para cambiar rama

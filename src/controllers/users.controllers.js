@@ -17,6 +17,7 @@ export const getUserById = async (req, res) => {
   res.json(rows[0]);
 };
 
+//Creación de usuario
 export const createUser = async (req, res) => {
   const data = req.body;
   console.log(data);
@@ -31,21 +32,60 @@ export const createUser = async (req, res) => {
       data.last_name,
       data.email,
       data.address,
-    ]
+    ],
   );
   return res.json(rows[0]);
 };
 
+//Eliminado físico
 export const deleteUser = async (req, res) => {
   const { id_user } = req.params;
   const { rowCount } = await pool.query(
     'DELETE FROM "user" WHERE id_user = $1 RETURNING *',
-    [id_user]
+    [id_user],
   );
   if (rowCount === 0) {
     return res.status(404).json({ message: "Usuario no encontrado" });
   }
   return res.sendStatus(204);
+};
+
+//Eliminado lógico (desactivar usuario)
+export const softDeleteUser = async (req, res) => {
+  const { id_user } = req.params;
+
+  const { rows, rowCount } = await pool.query(
+    'UPDATE "user" SET status = false WHERE id_user = $1 RETURNING *',
+    [id_user],
+  );
+
+  if (rowCount === 0) {
+    return res.status(404).json({ message: "Usuario no encontrado" });
+  }
+
+  return res.json({
+    message: "Usuario desactivado (eliminado lógicamente)",
+    usuario: rows[0],
+  });
+};
+
+//Reactivar usuario
+export const reactivateUser = async (req, res) => {
+  const { id_user } = req.params;
+
+  const { rows, rowCount } = await pool.query(
+    'UPDATE "user" SET status = true WHERE id_user = $1 RETURNING *',
+    [id_user],
+  );
+
+  if (rowCount === 0) {
+    return res.status(404).json({ message: "Usuario no encontrado" });
+  }
+
+  return res.json({
+    message: "Usuario reactivado correctamente",
+    usuario: rows[0],
+  });
 };
 
 export const updateUser = async (req, res) => {
@@ -65,7 +105,7 @@ export const updateUser = async (req, res) => {
         data.email,
         data.address,
         id_user,
-      ]
+      ],
     );
 
     if (rowCount === 0) {
@@ -84,4 +124,18 @@ export const updateUser = async (req, res) => {
     console.error(error);
     return res.status(500).json({ message: "Error interno del servidor" });
   }
+};
+
+export const patchUser = async (req, res) => {
+  const { id_user } = req.params;
+  const fields = Object.keys(req.body);
+  const values = Object.values(req.body);
+
+  const setQuery = fields.map((field, i) => `${field} = $${i + 1}`).join(", ");
+
+  const query = `UPDATE "user" SET ${setQuery} WHERE id_user = $${fields.length + 1} RETURNING *`;
+
+  const { rows } = await pool.query(query, [...values, id_user]);
+
+  res.json(rows[0]);
 };
