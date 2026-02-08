@@ -139,3 +139,14 @@ export const patchUser = async (req, res) => {
 
   res.json(rows[0]);
 };
+
+export const getUsersByTypeCont = async (req, res) => {
+  try {
+    const { role } = req.params; // 'employee' o 'client'
+    const query = 'SELECT * FROM "users" WHERE role = $1';
+    const result = await pool.query(query, [role]);
+    res.json(result.rows);
+  } catch (error) {
+    res.status(500).json({ message: "Error al obtener usuarios" });
+  }
+};

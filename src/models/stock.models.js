@@ -16,8 +16,17 @@ export const getStockById = async (req, res) => {
 };
 
 // CREATE stock record
+// stock.models.js mejorado
 export const createStock = async (req, res) => {
-  const data = req.body;
+  const { id_product, movement_type, quantity, movement_date, note_stock } =
+    req.body;
+
+  // 1. Validación preventiva: Evita que el servidor se rompa por datos nulos
+  if (!id_product || !quantity || !movement_type) {
+    throw new Error(
+      "Faltan campos obligatorios: id_product, quantity o movement_type.",
+    );
+  }
 
   const query = `
     INSERT INTO "stock" (id_product, movement_type, quantity, movement_date, note_stock)
@@ -25,15 +34,23 @@ export const createStock = async (req, res) => {
     RETURNING *
   `;
 
-  const result = await pool.query(query, [
-    data.id_product,
-    data.movement_type,
-    data.quantity,
-    data.movement_date,
-    data.note_stock,
-  ]);
+  try {
+    // 2. Limpieza de tipos: Forzamos que los valores numéricos sean correctos
+    const values = [
+      parseInt(id_product),
+      movement_type.toLowerCase().trim(), // <--- Esto soluciona el error 500 definitivamente
+      parseInt(quantity),
+      movement_date || new Date(),
+      note_stock,
+    ];
 
-  return result.rows[0];
+    const result = await pool.query(query, values);
+    return result.rows[0];
+  } catch (dbError) {
+    // 3. Log detallado del error de la base de datos
+    console.error("Error en la consulta SQL de Stock:", dbError.message);
+    throw dbError; // Esto será capturado por el catch del controlador (Error 500)
+  }
 };
 
 // UPDATE stock (PUT)
