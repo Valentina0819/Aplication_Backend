@@ -13,5 +13,7 @@ export const pool = new pg.Pool({
   password: DB_PASSWORD,
   database: DB_DATABASE,
   port: DB_PORT,
-  ssl: false, // <--- agrega esto
+  ssl: {
+    rejectUnauthorized: false, //(es necesario para Neon)
+  },
 });

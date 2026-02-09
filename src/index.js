@@ -26,7 +26,10 @@ app.listen(PORT, () => {
 
 import { pool } from "./db.js";
 
-pool
-  .query("SELECT NOW()")
-  .then((res) => console.log("DB conectada:", res.rows[0]))
-  .catch((err) => console.error("Error DB:", err));
+pool.connect((err, client, release) => {
+  if (err) {
+    return console.error("❌ Error adquiriendo cliente:", err.stack);
+  }
+  console.log("✅ Conexión a la base de datos establecida con éxito");
+  release();
+});
