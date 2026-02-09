@@ -7,6 +7,12 @@ import stockRoutes from "./routes/stock.routes.js";
 import categoryRoutes from "./routes/category.routes.js";
 import departmentRoutes from "./routes/department.routes.js";
 
+app.get("/", (req, res) => {
+  res.send(
+    "<h1>Servidor Funcionando</h1><p>El backend de Valentina está en línea.</p>",
+  );
+});
+
 app.use("/users", usersRoutes);
 app.use("/products", productsRoutes);
 app.use("/employee", employeeRoutes);
