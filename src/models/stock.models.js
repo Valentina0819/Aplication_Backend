@@ -2,15 +2,34 @@ import { pool } from "../db.js";
 
 // GET all stock records
 export const getStock = async (req, res) => {
-  const query = 'SELECT * FROM "stock"';
-  const result = await pool.query(query);
-  return result.rows;
+  // Usamos un alias 's' para stock y 'p' para product
+  const query = `
+    SELECT 
+      s.*, 
+      p.name_product 
+    FROM "stock" s
+    JOIN "product" p ON s.id_product = p.id_product
+    ORDER BY s.id_stock ASC
+  `;
+
+  try {
+    const result = await pool.query(query);
+    return result.rows;
+  } catch (error) {
+    console.error("Error al obtener movimientos con nombres:", error.message);
+    throw error;
+  }
 };
 
 // GET stock by ID
 export const getStockById = async (req, res) => {
   const { id_stock } = req.params;
-  const query = 'SELECT * FROM "stock" WHERE id_stock = $1';
+  const query = `
+    SELECT s.*, p.name_product 
+    FROM "stock" s
+    JOIN "product" p ON s.id_product = p.id_product
+    WHERE s.id_stock = $1
+  `;
   const result = await pool.query(query, [id_stock]);
   return result.rows[0];
 };

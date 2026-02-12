@@ -1,4 +1,4 @@
-import pg, { Pool } from "pg";
+import pg from "pg";
 import {
   DB_DATABASE,
   DB_HOST,
@@ -13,7 +13,6 @@ export const pool = new pg.Pool({
   password: DB_PASSWORD,
   database: DB_DATABASE,
   port: DB_PORT,
-  ssl: {
-    rejectUnauthorized: false, //(es necesario para Neon)
-  },
+  // Esto activa SSL solo cuando NO estás en localhost
+  ssl: DB_HOST.includes("localhost") ? false : { rejectUnauthorized: false },
 });
